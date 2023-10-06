@@ -1,5 +1,6 @@
 import { DateRange } from './dateRange'
 import { Link } from './link'
+import { Tag } from './tag'
 
 /**
  * This describes aditional information about a project
@@ -42,7 +43,7 @@ export type ProjectContentInfo = {
    * If passed as a string, it will create an element with both the displayed name and the CSS class selector as the string.
    * If passed as an object, it will create an element with the specified display name and CSS class selector
    */
-  tags?: (string | { displayName: string, className: string })[]
+  tags?: Tag[]
   /**
    * When defined, the period will be displayed as {from} - {to}
    */
