@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { marked } from 'marked'
 
-import { fetchAndReturnText } from '@/src/utilities/fetch'
+import { fetchAndReturnProject } from '@/src/utilities/fetch'
 import { useStore } from '@/src/store'
 
 const props = defineProps<{
@@ -19,10 +18,8 @@ const init = async () => {
     project.value = store.projects[props.id]
     ready.value = true
   } else {
-    const document = await fetchAndReturnText(`/content/projects/${props.id}.md`)
-    project.value = {
-      content: marked.parse(document)
-    }
+    project.value = await fetchAndReturnProject(`/content/projects/${props.id}.md`)
+    console.log(project.value)
     ready.value = true
   }
 }
