@@ -5,11 +5,17 @@ export type DetailsAnimationState =
 
 /**
  * Queries for HTMLDetailsElement nodes and inflates them with extra functionality
- * @param _document the reference to the document
+ * @param _window the reference to the window
  */
-export const inflateDetailsElements = (_document: Document) => {
-  _document.querySelectorAll('details').forEach((_element) => {
-    new DetailsElement(_element)
+export const inflateDetailsElements = (_window: Window) => {
+  const styles = window.getComputedStyle(_window.document.documentElement)
+  const options: KeyframeAnimationOptions = {
+    duration: Number(styles.getPropertyValue('--theme-transition-duration')?.replace('s', '') || 0.5) * 1000,
+    easing: styles.getPropertyValue('--theme-transition-function') || 'ease-in-out',
+  }
+
+  _window.document.querySelectorAll('details').forEach((_element) => {
+    new DetailsElement(_element, options)
   })
 }
 
@@ -17,22 +23,24 @@ export const inflateDetailsElements = (_document: Document) => {
  * Inflates HTMLDetailsElement with extra functionality, namely animations
  */
 export class DetailsElement {
+  animationOptions?: KeyframeAnimationOptions
   element: HTMLDetailsElement
   summary: HTMLElement
   content: HTMLElement
   animation: Animation | null = null
   animationState: DetailsAnimationState = 'idle'
 
-  constructor(_element: HTMLDetailsElement) {
+  constructor(_element: HTMLDetailsElement, _animationOptions?: KeyframeAnimationOptions) {
     this.element = _element
     this.summary = _element.querySelector('summary')!
     this.content = _element.querySelector('.content')!
     if (!this.summary) {
-      console.error('Summary was not found on this <details> element; therefore, it cannot be inflated with animation, and may not be compliant with web standards')
+      console.error('Summary was not found on this <details> element; therefore, it cannot be inflated, and may not be compliant with web standards')
     } else if (!this.content) {
-      console.warn('Content was not found on this <details> element; therefore, it cannot be inflated with animation')
+      console.warn('Content was not found on this <details> element; therefore, it cannot be inflated')
     } else {
       this.summary.addEventListener('click', (e) => this.onClick(e))
+      this.animationOptions = _animationOptions
     }
   }
 
@@ -50,7 +58,6 @@ export class DetailsElement {
    * Handler for user clicking the summary element
    */
   onClick(_event: Event) {
-    console.log('clicked')
     _event.preventDefault()
     this.element.style.overflow = 'hidden'
     if (this.animationState === 'closing' || !this.element.open) {
@@ -75,10 +82,8 @@ export class DetailsElement {
 
     this.animation = this.element.animate({
       height: [ startHeight, endHeight ]
-    }, {
-      duration: 400,
-      easing: 'ease-out'
-    })
+    }, this.animationOptions)
+
     this.animation.onfinish = () => this.onAnimationFinish(false)
     this.animation.oncancel = () => this.animationState = 'idle'
   }
@@ -106,11 +111,8 @@ export class DetailsElement {
     }
 
     this.animation = this.element.animate({
-      height: [startHeight, endHeight]
-    }, {
-      duration: 400,
-      easing: 'ease-out'
-    })
+      height: [ startHeight, endHeight ]
+    }, this.animationOptions)
 
     this.animation.onfinish = () => this.onAnimationFinish(true)
     this.animation.oncancel = () => this.animationState = 'idle'

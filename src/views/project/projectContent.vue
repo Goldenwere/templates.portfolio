@@ -8,7 +8,7 @@ defineProps<{
 }>()
 
 onMounted(() => {
-  inflateDetailsElements(document)
+  inflateDetailsElements(window)
 })
 </script>
 
