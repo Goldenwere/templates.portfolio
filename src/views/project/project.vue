@@ -44,6 +44,8 @@ init()
     )
 </template>
 
-<style scoped lang="sass">
-
+<style lang="sass">
+article
+  margin: auto
+  max-width: 48rem
 </style>

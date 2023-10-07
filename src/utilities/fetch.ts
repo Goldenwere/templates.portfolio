@@ -22,6 +22,7 @@ const domPurifyConfig = {
     'allowfullscreen',
     'allow',
     'alt',
+    'class',
     'href',
     'src',
     'style',

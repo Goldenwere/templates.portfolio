@@ -1,9 +1,10 @@
-import { MarkedExtension, TokenizerAndRendererExtension } from 'marked'
+import { MarkedExtension } from 'marked'
 import GithubSlugger from 'github-slugger'
 
 let slugger: GithubSlugger
 let sectionLevel = 1
 const sectionRegexps = new Array(7).fill(undefined).map((_, i) => new RegExp(`^ {0,3}(#{${i + 1}} )[^]*?(?:\\n(?=\\1)|$)`))
+const headingRegex = new RegExp(/^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/)
 
 export const headingSectionsExtension = (): MarkedExtension => {
   return {
@@ -37,13 +38,14 @@ export const headingSectionsExtension = (): MarkedExtension => {
   
         return {
           type: 'headingSections',
+          heading: headingRegex.exec(match[0])?.[2].trim(),
           raw: match[0],
           level: sectionLevel + 1,
           tokens,
         }
       },
       renderer(token) {
-        return `<section>\n${this.parser.parse(token.tokens!)}</section>\n`
+        return `<section id=${slugger.slug(token.heading)}>\n${this.parser.parse(token.tokens!)}</section>\n`
       },
     }],
   }
