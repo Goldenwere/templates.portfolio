@@ -22,6 +22,7 @@ code, pre
   font-family: var(--theme-font-mono)
 
 body
+  @include themeColors(var(--theme-body-bg), var(--theme-body-fg), var(--theme-link))
   background: var(--theme-body-bg)
   color: var(--theme-body-fg)
   font-family: var(--theme-font-body)
@@ -34,8 +35,18 @@ body
     .tippy-svg-arrow
       fill: var(--theme-tooltip-bg)
 a
-  color: var(--theme-link)
   cursor: pointer
+
+.input-container
+  @include themeColors(var(--theme-input-bg), var(--theme-input-fg))
+  &:hover
+    @include themeColors(var(--theme-input-bg-hover), var(--theme-input-fg-hover))
+.input
+  outline: var(--theme-input-border)
+  &:focus
+    outline: var(--theme-input-border-focus)
+  &:active
+    outline: var(--theme-input-border-active)
 
 .svg
   margin: auto

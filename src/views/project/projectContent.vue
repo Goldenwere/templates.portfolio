@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 
-import { inflateDetailsElements } from '@/src/components/raw/details'
+import { inflateEmbeds } from '@/src/components/raw/embed'
 
 defineProps<{
   content: string
 }>()
 
 onMounted(() => {
-  inflateDetailsElements(window)
+  inflateEmbeds(window)
 })
 </script>
 
