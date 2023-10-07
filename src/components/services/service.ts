@@ -1,3 +1,7 @@
+/**
+ * Service factory for creating singleton services
+ * @returns singleton generic class to extend from
+ */
 export const Service = <T>() => {
   return class Singleton {
     static _instance: T

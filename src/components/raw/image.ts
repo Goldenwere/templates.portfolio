@@ -1,15 +1,24 @@
 import { ModalService } from '@/src/components/services/modal'
 
+/**
+ * Queries for HTMLImageElement nodes and inflates them with extra functionality
+ * @param _window the reference to the window
+ */
 export const inflateImageEmbeds = (_window: Window) => {
   _window.document.querySelectorAll('img').forEach((_element) => {
     new ImageElement(_element, _window)
   })
 }
 
+/**
+ * Inflates HTMLImageElement with extra functionality,
+ * namely previewing images in the modal service and displaying captions from titles
+ */
 export class ImageElement {
   element: HTMLImageElement
   caption: HTMLParagraphElement | null = null
   wrapper: HTMLDivElement
+
   constructor(_element: HTMLImageElement, _window: Window) {
     this.element = _element
     this.wrapper = window.document.createElement('div')
@@ -24,6 +33,10 @@ export class ImageElement {
     this.element.addEventListener('click', this.onClick)
   }
 
+  /**
+   * Handler for when the image is clicked
+   * @param event the click event
+   */
   onClick = (event: Event) => {
     event.preventDefault()
     let cloned = this.wrapper.cloneNode(true) as HTMLElement
