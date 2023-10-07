@@ -8,6 +8,7 @@ import { headingSectionsExtension } from '@/src/utilities/marked'
 import './main.sass'
 import App from './main.vue'
 import router from './router'
+import { ModalService } from './components/services/modal'
 
 marked
 .use(headingSectionsExtension() as any)
@@ -18,6 +19,8 @@ marked
     return hljs.highlight(code, { language }).value
   },
 }))
+
+ModalService.init(window)
 
 createApp(App)
 .use(router)

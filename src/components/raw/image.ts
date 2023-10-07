@@ -1,3 +1,5 @@
+import { ModalService } from '@/src/components/services/modal'
+
 export const inflateImageEmbeds = (_window: Window) => {
   _window.document.querySelectorAll('img').forEach((_element) => {
     new ImageElement(_element, _window)
@@ -19,5 +21,14 @@ export class ImageElement {
       this.wrapper.appendChild(this.caption)
       this.caption.innerHTML = this.element.title
     }
+    this.element.addEventListener('click', this.onClick)
+  }
+
+  onClick = (event: Event) => {
+    event.preventDefault()
+    let cloned = this.wrapper.cloneNode(true) as HTMLElement
+    let image = cloned.firstChild as HTMLElement
+    image.removeEventListener('click', this.onClick)
+    ModalService.open(cloned)
   }
 }
