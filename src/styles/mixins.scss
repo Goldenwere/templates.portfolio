@@ -1,0 +1,87 @@
+@mixin positioning(
+  $top: unset,
+  $left: unset,
+  $bottom: unset,
+  $right: unset,
+) {
+  top: $top;
+  left: $left;
+  bottom: $bottom;
+  right: $right;
+}
+
+@mixin svgMask(
+  $url,
+  $size: contain,
+) {
+  -webkit-mask-image: url($url);
+  mask-image: url($url);
+  -webkit-mask-size: $size;
+  mask-size: $size;
+}
+
+@mixin themeColors(
+  $bg,
+  $fg,
+  $link: $fg,
+) {
+  background: $bg;
+  color: $fg;
+  a {
+    color: $link;
+  }
+}
+
+@mixin autoMaxSize(
+  $maxHeight,
+  $maxWidth: $maxHeight,
+  $height: auto,
+  $width: auto,
+) {
+  height: auto;
+  max-height: $maxHeight;
+  max-width: $maxWidth;
+  width: auto;
+}
+
+@mixin size(
+  $height,
+  $width: $height,
+) {
+  height: $height;
+  width: $width;
+}
+
+@mixin transition(
+  $props...
+) {
+  transition-duration: var(--theme-transition-duration);
+  transition-property: $props;
+  transition-timing-function: var(--theme-transition-function);
+}
+
+@mixin flex(
+  $align: unset,
+  $justify: unset,
+  $direction: row,
+  $gap: 0,
+  $wrap: unset,
+) {
+  align-items: $align;
+  display: flex;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+  gap: $gap;
+  justify-content: $justify;
+}
+
+@mixin grid(
+  $columns: unset,
+  $rows: unset,
+  $gap: 0,
+) {
+  display: grid;
+  grid-template-columns: $columns;
+  grid-template-rows: $rows;
+  gap: $gap;
+}

@@ -1,9 +1,12 @@
+@import './mixins.scss'
+
 details.embed
   summary
     display: block
     position: relative
     padding-left: 1em
     &::before
+      @include svgMask('/assets/icons/triangle.svg', contain)
       content: ""
       display: block
       position: absolute
@@ -11,10 +14,6 @@ details.embed
       left: 0
       width: 1em
       height: 1em
-      mask: url('/assets/icons/triangle.svg') no-repeat 50% 50%
-      -webkit-mask: url('/assets/icons/triangle.svg') no-repeat 50% 50%
-      mask-size: contain
-      -webkit-mask-size: contain
       background-color: var(--theme-body-fg)
       transform: rotate(90deg)
       animation-duration: var(--theme-transition-duration)
