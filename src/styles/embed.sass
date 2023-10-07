@@ -1,0 +1,43 @@
+details.embed
+  summary
+    display: block
+    position: relative
+    padding-left: 1em
+    &::before
+      content: ""
+      display: block
+      position: absolute
+      top: 0
+      left: 0
+      width: 1em
+      height: 1em
+      mask: url('/assets/icons/triangle.svg') no-repeat 50% 50%
+      -webkit-mask: url('/assets/icons/triangle.svg') no-repeat 50% 50%
+      mask-size: contain
+      -webkit-mask-size: contain
+      background-color: var(--theme-body-fg)
+      transform: rotate(90deg)
+      animation-duration: var(--theme-transition-duration)
+      animation-timing-function: var(--theme-transition-function)
+details.embed[open=""]
+  summary
+    &::before
+      transform: rotate(180deg)
+
+details.embed.closing
+  summary
+    &::before
+      animation-name: details-arrow
+      animation-direction: reverse
+
+details.embed.opening
+  summary
+    &::before
+      animation-name: details-arrow
+      animation-direction: normal
+
+@keyframes details-arrow
+  0%
+    transform: rotate(90deg)
+  100%
+    transform: rotate(180deg)

@@ -1,5 +1,6 @@
 @import 'normalize.css'
 @import 'highlight.js/styles/default.css'
+@import '@/src/styles/embed.sass'
 
 *
   box-sizing: border-box
@@ -38,9 +39,5 @@ a
   mask-position: center center
   mask-size: 100% 100%
 
-.input
-  outline: var(--theme-input-border)
-  &:focus
-    outline: var(--theme-input-border-focus)
-  &:active
-    outline: var(--theme-input-border-active)
+.grid
+  display: grid

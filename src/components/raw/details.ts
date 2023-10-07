@@ -30,6 +30,14 @@ export class DetailsElement {
   animation: Animation | null = null
   animationState: DetailsAnimationState = 'idle'
 
+  set _animationState(_value: DetailsAnimationState) {
+    this.animationState = _value
+    this.element.classList.remove('opening', 'closing')
+    if (this.animationState !== 'idle') {
+      this.element.classList.add(this.animationState)
+    }
+  }
+
   constructor(_element: HTMLDetailsElement, _animationOptions?: KeyframeAnimationOptions) {
     this.element = _element
     this.summary = _element.querySelector('summary')!
@@ -41,6 +49,7 @@ export class DetailsElement {
     } else {
       this.summary.addEventListener('click', (e) => this.onClick(e))
       this.animationOptions = _animationOptions
+      this.element.classList.add('embed')
     }
   }
 
@@ -50,7 +59,7 @@ export class DetailsElement {
   onAnimationFinish(_isOpen: boolean) {
     this.element.open = _isOpen
     this.animation = null
-    this.animationState = 'idle'
+    this._animationState = 'idle'
     this.element.style.height = this.element.style.overflow = ''
   }
 
@@ -71,7 +80,7 @@ export class DetailsElement {
    * Shrinks the <details> block with animation
    */
   shrink() {
-    this.animationState = 'closing'
+    this._animationState = 'closing'
 
     const startHeight = `${this.element.offsetHeight}px`
     const endHeight = `${this.summary.offsetHeight}px`
@@ -85,7 +94,7 @@ export class DetailsElement {
     }, this.animationOptions)
 
     this.animation.onfinish = () => this.onAnimationFinish(false)
-    this.animation.oncancel = () => this.animationState = 'idle'
+    this.animation.oncancel = () => this._animationState = 'idle'
   }
 
   /**
@@ -101,7 +110,7 @@ export class DetailsElement {
    * Expands the <details> block with animation
    */
   expand() {
-    this.animationState = 'opening'
+    this._animationState = 'opening'
 
     const startHeight = `${this.element.offsetHeight}px`
     const endHeight = `${this.summary.offsetHeight + this.content.offsetHeight}px`
@@ -115,6 +124,6 @@ export class DetailsElement {
     }, this.animationOptions)
 
     this.animation.onfinish = () => this.onAnimationFinish(true)
-    this.animation.oncancel = () => this.animationState = 'idle'
+    this.animation.oncancel = () => this._animationState = 'idle'
   }
 }
