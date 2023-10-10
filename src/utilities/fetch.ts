@@ -1,6 +1,7 @@
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import yaml from 'js-yaml'
+import { deepCopy } from './content'
 
 import {
   type ProjectContentInfo,
@@ -138,11 +139,11 @@ export const fetchAndReturnProject = async (path: string): Promise<Project> => {
 
   content = marked.parse(content)
 
-  return {
+  return patchSharedFields({
     content,
     contentInfo,
     listingInfo,
-  }
+  })
 }
 
 /**
@@ -153,6 +154,26 @@ export const fetchAndReturnProject = async (path: string): Promise<Project> => {
 export const fetchAndParseYaml = async (path: string) => {
   const text = await fetchAndReturnText(path)
   return yaml.load(text)
+}
+
+/**
+ * Checks for missing fields in a `Project`'s info fields and patches them with corresponding fields if defined in the other `Project`'s info fields.
+ * For example, if the contentInfo is missing period, it will pull from listingInfo instead, if defined, and visa versa.
+ * @param project the project model to patch
+ */
+export const patchSharedFields = async (project: Partial<Project>) => {
+  const patched = deepCopy(project)
+  if (!!patched.contentInfo) {
+    if (!patched.contentInfo.period) {
+      patched.contentInfo.period = patched.listingInfo?.period
+    }
+  }
+  if (!!patched.listingInfo) {
+    if (!patched.listingInfo.period) {
+      patched.listingInfo.period = patched.contentInfo?.period
+    }
+  }
+  return patched
 }
 
 /**
