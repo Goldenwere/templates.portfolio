@@ -4,7 +4,10 @@ import { Tag } from './tag'
 
 /**
  * Shared information between projects.
- * Information here can be set in either `!LISTING{}` or `!CONTENT{}`, with `!LISTING{}` taking priority
+ * Information here can be set in either `!LISTING{}` or `!CONTENT{}` or both.
+ * If in both, respective views will pull from respective declarations
+ * (i.e. the projects/portfolio page will pull from LISTING, the individual project page will pull from CONTENT,
+ * and these views will fallback to the other objects if undefined in their own)
  */
 export type ProjectSharedInfo = {
   /**
@@ -37,7 +40,9 @@ export type ProjectSharedInfo = {
  *   - 'filterc'
  * }
  */
-export type ProjectListingInfo = {
+export type ProjectListingInfo =
+& ProjectSharedInfo
+& {
   /**[Supports Markdown]
    * Caption displayed below the title of the project on the projects page
    */
@@ -87,7 +92,10 @@ export type ProjectListingInfo = {
  *   role: 'Creator / Developer'
  * }
  */
-export type ProjectContentInfo = {
+export type ProjectContentInfo = 
+& ProjectSharedInfo
+& { [key: string]: string }
+& {
   /**
    * When defined, tags will which will create styled elements for each tag.
    * If passed as a string, it will create an element with both the displayed name and the CSS class selector as the string.
@@ -98,4 +106,4 @@ export type ProjectContentInfo = {
    * When defined, this will create a section below the table with the list of links passed through
    */
   places?: Link[]
-} & { [key: string]: string }
+}

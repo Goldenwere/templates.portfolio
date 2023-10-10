@@ -5,3 +5,8 @@ export const useStore = defineStore('store', {
     projects: {} as { [key: string]: {} },
   }),
 })
+
+export type AppStoreDefinition = Omit<
+  ReturnType<typeof useStore>,
+  keyof ReturnType<typeof defineStore>
+>

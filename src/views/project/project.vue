@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { fetchAndReturnProject } from '@/src/utilities/fetch'
+import { getProject } from '@/src/utilities/content'
 import { useStore } from '@/src/store'
 
 import { type Project } from '@/src/types/views/project'
@@ -18,14 +18,8 @@ const store = useStore()
 const ready = ref(false)
 let project = ref(undefined as unknown as Project)
 
-const fetchProject = async () => {
-  return !!store.projects[props.id]
-    ? store.projects[props.id]
-    : fetchAndReturnProject(`/content/projects/${props.id}.md`)
-}
-
 const init = async () => {
-  project.value = await fetchProject()
+  project.value = await getProject(store, props.id)
   ready.value = true
 }
 

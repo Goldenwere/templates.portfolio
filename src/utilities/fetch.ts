@@ -1,16 +1,5 @@
 import DOMPurify from 'dompurify'
-import { marked } from 'marked'
 import yaml from 'js-yaml'
-import { deepCopy } from './content'
-
-import {
-  type ProjectContentInfo,
-  type ProjectListingInfo,
-} from '@/src/types/shared/project'
-import { type Project } from '@/src/types/views/project'
-
-export const contentInfoRegex = new RegExp(/^(!CONTENT)({\n)((  .{0,}\n){0,})(})/gm)
-export const listingInfoRegex = new RegExp(/^(!LISTING)({\n)((  .{0,}\n){0,})(})/gm)
 
 /**
  * Config used for DOMPurify.
@@ -106,47 +95,6 @@ export const fetchAndReturnText = async (path: string) => {
 }
 
 /**
- * Fetches and builds a project from markdown
- * @param path the path of the markdown document to load
- * @returns the project parsed from the markdown document
- */
-export const fetchAndReturnProject = async (path: string): Promise<Project> => {
-  const document = await fetchAndReturnText(path)
-
-  const contentInfoSrc = contentInfoRegex.exec(document)
-  const listingInfoSrc = listingInfoRegex.exec(document)
-
-  let contentInfo: ProjectContentInfo | undefined = undefined
-  let listingInfo: ProjectListingInfo | undefined = undefined
-  let content = document
-
-  if (!!contentInfoSrc) {
-    content = content.replace(contentInfoRegex, '')
-    try {
-      contentInfo = yaml.load(contentInfoSrc[3]) as any
-    } catch (err) {
-      console.log(err)
-    }
-  }
-  if (!!listingInfoSrc) {
-    content = content.replace(listingInfoRegex, '')
-    try {
-      listingInfo = yaml.load(listingInfoSrc[3]) as any
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  content = marked.parse(content)
-
-  return patchSharedFields({
-    content,
-    contentInfo,
-    listingInfo,
-  })
-}
-
-/**
  * Fetches, sanitizes, and parses YAML files
  * @param path the path of the YAML file to load
  * @returns the content of the YAML file after sanitizing then parsing
@@ -154,26 +102,6 @@ export const fetchAndReturnProject = async (path: string): Promise<Project> => {
 export const fetchAndParseYaml = async (path: string) => {
   const text = await fetchAndReturnText(path)
   return yaml.load(text)
-}
-
-/**
- * Checks for missing fields in a `Project`'s info fields and patches them with corresponding fields if defined in the other `Project`'s info fields.
- * For example, if the contentInfo is missing period, it will pull from listingInfo instead, if defined, and visa versa.
- * @param project the project model to patch
- */
-export const patchSharedFields = async (project: Partial<Project>) => {
-  const patched = deepCopy(project)
-  if (!!patched.contentInfo) {
-    if (!patched.contentInfo.period) {
-      patched.contentInfo.period = patched.listingInfo?.period
-    }
-  }
-  if (!!patched.listingInfo) {
-    if (!patched.listingInfo.period) {
-      patched.listingInfo.period = patched.contentInfo?.period
-    }
-  }
-  return patched
 }
 
 /**
