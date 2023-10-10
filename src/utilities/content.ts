@@ -7,6 +7,7 @@ import { fetchAndParseYaml, fetchAndReturnText } from './fetch'
 import {
   type AppStoreDefinition,
 } from '@/src/store'
+import { type DateRange } from '@/src/types/shared/dateRange'
 import {
   type ProjectContentInfo,
   type ProjectListingInfo,
@@ -103,4 +104,13 @@ export const patchSharedFields = async (project: Partial<ProjectViewModel>) => {
     }
   }
   return patched
+}
+
+/**
+ * Formats the period object into a readable string
+ * @param period the period to format
+ * @returns the formatted string
+ */
+export const getFormattedPeriod = (period: DateRange) => {
+  return `${period.from}${!!period.to ? ' - ' + period.to : ''}`
 }

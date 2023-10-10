@@ -1,7 +1,7 @@
 import { type ProjectListingInfo } from './project'
 
 /**
- * Potentially recursive definition of filters whose tags correspond to the tags assigned to projects listing information
+ * Defines a filter category in the filters panel
  */
 export type ProjectFilterCategory = {
   /**
@@ -15,15 +15,15 @@ export type ProjectFilterCategory = {
 }
 
 /**
- * Defines a filter
+ * Defines a filter for a project
  */
 export type FilterDefinition = {
   /**
-   * The name to display
+   * The name to display in the filters panel
    */
   displayName: string
   /**
-   * The tag which corresponds to {@link ProjectListingInfo}
+   * The tag which the filter corresponds to for when defined in {@link ProjectListingInfo.tags}
    */
   tag: string
 }

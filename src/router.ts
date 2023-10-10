@@ -6,6 +6,7 @@ import {
 
 const homeBody = () => import ('./views/home/home.vue')
 const projectBody = () => import ('./views/project/project.vue')
+const projectsBody = () => import ('./views/projects/projects.vue')
 
 export const siteRoutes: RouteRecordRaw[] = [
   {
@@ -19,6 +20,11 @@ export const siteRoutes: RouteRecordRaw[] = [
     name: 'project',
     props: true,
   },
+  {
+    path: '/projects',
+    component: projectsBody,
+    name: 'projects',
+  }
 ]
 
 const router = createRouter({

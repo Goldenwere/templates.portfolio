@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+
+import { getFormattedPeriod } from '@/src/utilities/content'
+
 import { type ProjectContentInfo } from '@/src/types/shared/project'
 
 import projectInfoPlaces from './projectInfoPlaces.vue'
@@ -16,7 +19,7 @@ const table = computed(() => {
   delete info.places
   delete info.tags
   if (!!info.period) {
-    info.period = `${info.period.from}${info.period.to ? ' - ' + info.period.to : ''}` as any
+    info.period = getFormattedPeriod(info.period) as any
   }
   return info
 })
