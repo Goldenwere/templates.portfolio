@@ -8,7 +8,7 @@ import {
  * YAML markup wrapped in a `!<DECLARATION>{}` will be pulled into their respective fields in this model.
  * All remaining content will be stored into the `content` field in this model.
  */
-export type Project = {
+export type ProjectViewModel = {
   /**
    * The remaining markdown body of the project
    */

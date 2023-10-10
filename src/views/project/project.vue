@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { getProject } from '@/src/utilities/content'
 import { useStore } from '@/src/store'
 
-import { type Project } from '@/src/types/views/project'
+import { type ProjectViewModel } from '@/src/types/views/project'
 
 import projectContent from './projectContent.vue'
 import projectInfo from './projectInfo.vue'
@@ -16,7 +16,7 @@ const props = defineProps<{
 const store = useStore()
 
 const ready = ref(false)
-let project = ref(undefined as unknown as Project)
+let project = ref(undefined as unknown as ProjectViewModel)
 
 const init = async () => {
   project.value = await getProject(store, props.id)
