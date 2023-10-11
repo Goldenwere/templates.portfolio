@@ -27,3 +27,8 @@ export type FilterDefinition = {
    */
   tag: string
 }
+
+export type FilterChangeEvent = {
+  tag: string
+  value: boolean
+}
