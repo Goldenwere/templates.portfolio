@@ -3,12 +3,15 @@ import { onMounted } from 'vue'
 
 import { inflateEmbeds } from '@/src/components/raw/embed'
 
-defineProps<{
+import { type ProjectListingInfo } from '@/src/types/shared/project'
+
+const props = defineProps<{
   content: string
+  info: ProjectListingInfo
 }>()
 
 onMounted(() => {
-  inflateEmbeds(window)
+  inflateEmbeds(window, props.info)
 })
 </script>
 

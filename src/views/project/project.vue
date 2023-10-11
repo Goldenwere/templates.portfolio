@@ -3,6 +3,8 @@ import { ref } from 'vue'
 
 import { useStore } from '@/src/store'
 
+import { type ProjectListingInfo } from '@/src/types/shared/project'
+
 import projectContent from './projectContent.vue'
 
 const props = defineProps<{
@@ -13,9 +15,11 @@ const store = useStore()
 
 const ready = ref(false)
 let project = ref('')
+let info = ref(undefined as unknown as ProjectListingInfo)
 
 const init = async () => {
   project.value = await store.getProjectContent(props.id)
+  info.value = await store.getProjectListingInfo(props.id)
   ready.value = true
 }
 
@@ -29,6 +33,7 @@ init()
   )
     projectContent(
       :content='project'
+      :info='info'
     )
 </template>
 
