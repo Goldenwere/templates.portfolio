@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { getProject } from '@/src/utilities/content'
 import { useStore } from '@/src/store'
 
-import { type ProjectViewModel } from '@/src/types/views/project'
-
 import projectContent from './projectContent.vue'
-import projectInfo from './projectInfo.vue'
 
 const props = defineProps<{
   id: string,
@@ -16,10 +12,10 @@ const props = defineProps<{
 const store = useStore()
 
 const ready = ref(false)
-let project = ref(undefined as unknown as ProjectViewModel)
+let project = ref('')
 
 const init = async () => {
-  project.value = await getProject(store, props.id)
+  project.value = await store.getProjectContent(props.id)
   ready.value = true
 }
 
@@ -31,12 +27,8 @@ init()
   article(
     v-if='ready'
   )
-    projectInfo(
-      v-if='project.contentInfo'
-      :contentInfo='project.contentInfo'
-    )
     projectContent(
-      :content='project.content'
+      :content='project'
     )
 </template>
 

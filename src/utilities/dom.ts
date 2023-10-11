@@ -1,3 +1,9 @@
+import rfdc from 'rfdc'
+
+import { type DateRange } from '@/src/types/shared/dateRange'
+
+export const deepCopy = rfdc()
+
 /**
  * Runs element.querySelector for every selector in the order they were passed in until an element is found
  * @param element the element to query children from
@@ -15,4 +21,13 @@ export const findFirstMatchingChild = ( element: ParentNode, ...selectors: strin
     return true
   })
   return returnElement
+}
+
+/**
+ * Formats the period object into a readable string
+ * @param period the period to format
+ * @returns the formatted string
+ */
+export const getFormattedPeriod = (period: DateRange) => {
+  return `${period.from}${!!period.to ? ' - ' + period.to : ''}`
 }

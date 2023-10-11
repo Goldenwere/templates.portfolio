@@ -1,5 +1,6 @@
 import DOMPurify from 'dompurify'
 import yaml from 'js-yaml'
+import { marked } from 'marked'
 
 /**
  * Config used for DOMPurify.
@@ -102,6 +103,16 @@ export const fetchAndReturnText = async (path: string) => {
 export const fetchAndParseYaml = async <T>(path: string) => {
   const text = await fetchAndReturnText(path)
   return yaml.load(text) as T
+}
+
+/**
+ * Fetches, sanitizes, and parses Markdown files
+ * @param path the path of the markdown document to load
+ * @returns the project parsed from the markdown document
+ */
+export const fetchAndParseMarkdown = async (path: string) => {
+  const document = await fetchAndReturnText(path)
+  return marked.parse(document)
 }
 
 /**

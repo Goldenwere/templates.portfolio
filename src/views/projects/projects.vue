@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useStore } from '@/src/store'
-import { fetchAndReturnProject, loadProjects } from '@/src/utilities/content'
 
 import { type ProjectListingInfo } from '@/src/types/shared/project'
 import { type ProjectsViewModel } from '@/src/types/views/projects'
@@ -14,13 +13,11 @@ const projects = ref([] as ProjectListingInfo[])
 const ready = ref(false)
 
 const init = async () => {
-  content.value = await loadProjects(store)
-  Promise.all(Object.keys(content.value.projects).map((id) => fetchAndReturnProject(content.value.projects[id])))
+  content.value = await store.getProjectsData()
+  Promise.all(Object.keys(content.value.projects).map((id) => store.getProjectListingInfo(id)))
   .then((_projects) => {
     _projects.forEach((_project) => {
-      if (!!_project.listingInfo) {
-        projects.value.push(_project.listingInfo)
-      }
+      projects.value.push(_project)
     })
     ready.value = true
   })

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { getFormattedPeriod } from '@/src/utilities/content'
+import { getFormattedPeriod } from '@/src/utilities/dom'
 
 import { type ProjectListingInfo } from '@/src/types/shared/project'
 

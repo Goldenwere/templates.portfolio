@@ -14,8 +14,8 @@ export type ProjectsViewModel = {
    * This is stored as a key-value object, where:
    * - the key is the id of the project used when navigating to the individual project page
    * (i.e. `<site root>/project/<id>` in the browser)
-   * - the value is the url to the markdown file the project is stored
-   * (e.g. `<site root>/content/projects/<project>.md`)
+   * - the value is the url to the directory the project is stored; the id will be appended
+   * (e.g. setting `<site root>/content/projects` will resolve projects to `<site root>/content/projects/<id>.<md|yml>`)
    */
   projects: { [id: string]: string }
 }
