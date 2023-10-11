@@ -6,6 +6,7 @@ import { type ProjectListingInfo } from '@/src/types/shared/project'
 import { type ProjectsViewModel } from '@/src/types/views/projects'
 
 import projectEmbed from '@/src/components/projects/projectEmbed.vue'
+import projectsFilters from './projectsFilters.vue'
 
 const store = useStore()
 const content = ref({} as ProjectsViewModel)
@@ -38,8 +39,11 @@ init()
           v-for='project in projects'
           :info='project'
         )
-    section.filters
-      h2 Filters
+    projectsFilters(
+      v-if='content.filters'
+      :filters='content.filters'
+      :startingDepth='3'
+    )
 </template>
 
 <style scoped lang="sass">
@@ -47,7 +51,7 @@ init()
   display: flex
   .projects-grid
     flex: 1 1 auto
-  .filters
+  #filters
     flex: 0 0 16em
 .projects-grid
   .grid
