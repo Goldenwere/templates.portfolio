@@ -32,3 +32,5 @@ export type FilterChangeEvent = {
   tag: string
   value: boolean
 }
+
+export type FilterState = { [tag: string]: boolean }

@@ -1,6 +1,7 @@
 import rfdc from 'rfdc'
 
 import { type DateRange } from '@/src/types/shared/dateRange'
+import { type FilterState } from '@/src/types/shared/filter'
 
 export const deepCopy = rfdc()
 
@@ -30,4 +31,16 @@ export const findFirstMatchingChild = ( element: ParentNode, ...selectors: strin
  */
 export const getFormattedPeriod = (period: DateRange) => {
   return `${period.from}${!!period.to ? ' - ' + period.to : ''}`
+}
+
+export const doFiltersMatchTags = (state: FilterState, tags?: string[]) => {
+  const stateTags = Object.keys(state)
+  const anyIsTrue = !!stateTags.find(tag => !!state[tag])
+  if (!anyIsTrue) {
+    return true
+  } else if (!!tags) {
+    return tags.find(tag => !!state[tag])
+  } else {
+    return false
+  }
 }

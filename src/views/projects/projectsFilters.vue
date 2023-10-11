@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { type FilterChangeEvent, type FilterDefinition, type ProjectFilterCategory } from '@/src/types/shared/filter'
+import {
+  type FilterChangeEvent,
+  type FilterDefinition,
+  type FilterState,
+  type ProjectFilterCategory,
+} from '@/src/types/shared/filter'
 
 import projectsFilter from './projectsFilter.vue'
 
@@ -8,8 +13,15 @@ const props = defineProps<{
   startingDepth: number,
 }>()
 
+const emit = defineEmits<{
+  (e: 'tagStateChanged', value: FilterState): void,
+}>()
+
+const tagState: FilterState = {}
+
 const onTagChanged = (value: FilterChangeEvent) => {
-  console.log(`${value.tag} changed to ${value.value}`)
+  tagState[value.tag] = value.value
+  emit('tagStateChanged', tagState)
 }
 </script>
 

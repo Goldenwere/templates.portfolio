@@ -11,6 +11,7 @@ export const useStore = defineStore('store', {
     _projectsById: {} as { [key: string]: ProjectStoreEntry },
     /** content of the projects/portfolio page; note that directly referencing this prop can return undefined */
     _projectsData: null as unknown as ProjectsViewModel,
+    projectFilters: {} as { [tag: string]: boolean },
   }),
   actions: {
     /**

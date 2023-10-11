@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import { useStore } from '@/src/store'
 
+import { doFiltersMatchTags } from '@/src/utilities/dom'
+
+import { type FilterState } from '@/src/types/shared/filter'
 import { type ProjectListingInfo } from '@/src/types/shared/project'
 import { type ProjectsViewModel } from '@/src/types/views/projects'
 
@@ -9,9 +12,31 @@ import projectEmbed from '@/src/components/projects/projectEmbed.vue'
 import projectsFilters from './projectsFilters.vue'
 
 const store = useStore()
+
 const content = ref({} as ProjectsViewModel)
 const projects = ref([] as ProjectListingInfo[])
 const ready = ref(false)
+const projectEmbeds = ref({} as { [index: string|number]: { el: HTMLElement, tags?: string[] } })
+
+const setEmbedRef = (index: string | number, tags?: string[]) => {
+  window.requestAnimationFrame(() => {
+    projectEmbeds.value[index] = {
+      el: document.querySelector(`.project-embed[project-id="project_${index}"]`)!,
+      tags,
+    }
+  })
+}
+
+const onTagStateChanged = (state: FilterState) => {
+  Object.values(projectEmbeds.value).forEach((embed) => {
+    const shown = doFiltersMatchTags(state, embed.tags)
+    if (!!shown) {
+      embed.el.classList.remove('hidden')
+    } else {
+      embed.el.classList.add('hidden')
+    }
+  })
+}
 
 const init = async () => {
   content.value = await store.getProjectsData()
@@ -36,17 +61,22 @@ init()
       h2 Projects
       .grid
         projectEmbed(
-          v-for='project in projects'
+          v-for='(project, index) in projects'
           :info='project'
+          :project-id='`project_${index}`'
+          :ref='el => setEmbedRef(index, project.tags)'
         )
     projectsFilters(
       v-if='content.filters'
       :filters='content.filters'
       :startingDepth='3'
+      @tagStateChanged='onTagStateChanged'
     )
 </template>
 
 <style scoped lang="sass">
+.hidden
+  opacity: 0.5
 .content
   display: flex
   .projects-grid
