@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { marked } from 'marked';
 
 import { getFormattedPeriod } from '@/src/utilities/dom'
 
@@ -13,6 +14,9 @@ const period = computed(() => (!!props.info.period
   ? getFormattedPeriod(props.info.period)
   : undefined
 ))
+const caption = computed(() => marked.parse(props.info.caption || ''))
+const summary = computed(() => marked.parse(props.info.summary || ''))
+const title = computed(() => marked.parse(props.info.title))
 </script>
 
 <template lang="pug">
@@ -22,16 +26,16 @@ const period = computed(() => (!!props.info.period
   )
     .text
       p.title(
-        v-html='info.title'
+        v-html='title'
       )
       p.period(
         v-if='period'
       ) {{ period }}
   .caption(
-    v-html='info.caption'
+    v-html='caption'
   )
   .summary(
-    v-html='info.summary'
+    v-html='summary'
   )
 </template>
 
