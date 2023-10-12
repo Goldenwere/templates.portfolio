@@ -28,9 +28,21 @@ export type FilterDefinition = {
   tag: string
 }
 
+/**
+ * Whenever a filter is toggled in the filters panel, this holds the data regarding that change
+ */
 export type FilterChangeEvent = {
+  /**
+   * The tag that the filter is associated with
+   */
   tag: string
+  /**
+   * The toggle state of the filter
+   */
   value: boolean
 }
 
+/**
+ * Defines the state of the filters panel
+ */
 export type FilterState = { [tag: string]: boolean }

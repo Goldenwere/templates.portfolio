@@ -8,19 +8,23 @@ import {
 
 import projectsFilter from './projectsFilter.vue'
 
-const props = defineProps<{
+defineProps<{
   filters: FilterDefinition[] | ProjectFilterCategory[],
   startingDepth: number,
 }>()
 
 const emit = defineEmits<{
-  (e: 'tagStateChanged', value: FilterState): void,
+  (e: 'tagStateChanged', state: FilterState): void,
 }>()
 
 const tagState: FilterState = {}
 
-const onTagChanged = (value: FilterChangeEvent) => {
-  tagState[value.tag] = value.value
+/**
+ * Handles changes to individual filters in the filters panel
+ * @param event the change event information
+ */
+const onFilterChanged = (event: FilterChangeEvent) => {
+  tagState[event.tag] = event.value
   emit('tagStateChanged', tagState)
 }
 </script>
@@ -32,7 +36,7 @@ section#filters
     v-for='filter in filters'
     :filter='filter'
     :depth='startingDepth'
-    @tagChanged='onTagChanged'
+    @filterChanged='onFilterChanged'
   )
 </template>
 

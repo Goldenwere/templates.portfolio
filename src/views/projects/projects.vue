@@ -11,14 +11,24 @@ import { type ProjectsViewModel } from '@/src/types/views/projects'
 import projectEmbed from '@/src/components/projects/projectEmbed.vue'
 import projectsFilters from './projectsFilters.vue'
 
+type EmbedReference = {
+  el: HTMLElement,
+  tags?: string[]
+}
+
 const store = useStore()
 
 const content = ref({} as ProjectsViewModel)
 const projects = ref([] as ProjectListingInfo[])
 const ready = ref(false)
-const projectEmbeds = ref({} as { [index: string|number]: { el: HTMLElement, tags?: string[] } })
+const projectEmbeds = ref({} as { [index: number]: EmbedReference })
 
-const setEmbedRef = (index: string | number, tags?: string[]) => {
+/**
+ * Assigns a reference to a project embed to handle toggling visbility when filters change
+ * @param index the index of the embed being assigned to the id
+ * @param tags the tags of the embed
+ */
+const setEmbedRef = (index: number, tags?: string[]) => {
   window.requestAnimationFrame(() => {
     projectEmbeds.value[index] = {
       el: document.querySelector(`.project-embed[project-id="project_${index}"]`)!,
@@ -27,7 +37,11 @@ const setEmbedRef = (index: string | number, tags?: string[]) => {
   })
 }
 
-const onTagStateChanged = (state: FilterState) => {
+/**
+ * Handles changes to the filters panel
+ * @param state the new filter state
+ */
+const onFilterStateChanged = (state: FilterState) => {
   Object.values(projectEmbeds.value).forEach((embed) => {
     const shown = doFiltersMatchTags(state, embed.tags)
     if (!!shown) {
@@ -70,13 +84,13 @@ init()
       v-if='content.filters'
       :filters='content.filters'
       :startingDepth='3'
-      @tagStateChanged='onTagStateChanged'
+      @filterStateChanged='onFilterStateChanged'
     )
 </template>
 
 <style scoped lang="sass">
 .hidden
-  opacity: 0.5
+  opacity: 0.2
 .content
   display: flex
   .projects-grid

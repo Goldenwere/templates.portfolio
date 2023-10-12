@@ -33,14 +33,20 @@ export const getFormattedPeriod = (period: DateRange) => {
   return `${period.from}${!!period.to ? ' - ' + period.to : ''}`
 }
 
+/**
+ * Checks a project's tags to see if any of them match any of the state tags
+ * @param state the state to check against
+ * @param tags the tags to check
+ * @returns 
+ * - `true` if any of the project's tags are `true` in the state
+ * - `true` if none of the tags in the filter state are `true` (indicating no filters being set in the panel)
+ * - `false` if the project has no tags or if none of its tags are toggled to `true` in the filters panel
+ */
 export const doFiltersMatchTags = (state: FilterState, tags?: string[]) => {
-  const stateTags = Object.keys(state)
-  const anyIsTrue = !!stateTags.find(tag => !!state[tag])
+  const anyIsTrue = !!Object.keys(state).find(tag => !!state[tag])
   if (!anyIsTrue) {
     return true
-  } else if (!!tags) {
-    return tags.find(tag => !!state[tag])
   } else {
-    return false
-  }
+    return !!tags?.find(tag => !!state[tag])
+  } 
 }

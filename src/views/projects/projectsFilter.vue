@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { type FilterChangeEvent, type FilterDefinition, type ProjectFilterCategory } from '@/src/types/shared/filter'
+import {
+  type FilterChangeEvent,
+  type FilterDefinition,
+  type ProjectFilterCategory,
+} from '@/src/types/shared/filter'
 
 defineProps<{
   filter: FilterDefinition | ProjectFilterCategory
@@ -7,7 +11,7 @@ defineProps<{
 }>()
 
 defineEmits<{
-  (e: 'tagChanged', value: FilterChangeEvent): void,
+  (e: 'filterChanged', value: FilterChangeEvent): void,
 }>()
 </script>
 
@@ -35,7 +39,7 @@ div
       v-for='child in filter.filters'
       :filter='child'
       :depth='depth + 1'
-      @tagChanged='$emit("tagChanged", $event)'
+      @filterChanged='$emit("filterChanged", $event)'
     )
   .filter(
     v-else
@@ -45,7 +49,7 @@ div
       type='checkbox'
       :id='`filter_${filter.tag}`'
       :name='`filter_${filter.tag}`'
-      @input='$emit("tagChanged", { tag: filter.tag, value: $event.target.checked })'
+      @input='$emit("filterChanged", { tag: filter.tag, value: $event.target.checked })'
     )
     label(
       :for='`filter_${filter.tag}`'
