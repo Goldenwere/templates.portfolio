@@ -101,4 +101,5 @@ init()
 .projects-grid
   .grid
     grid-template-columns: repeat(auto-fit, minmax(18em, 1fr))
+    gap: var(--theme-project-spacing)
 </style>

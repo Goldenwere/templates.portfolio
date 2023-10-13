@@ -13,5 +13,6 @@
 </template>
 
 <style scoped lang="sass">
-
+main
+  margin: var(--theme-body-margin)
 </style>

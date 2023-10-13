@@ -27,9 +27,13 @@ export type ProjectListingInfo = {
    */
   title: string
   /**[CSS:background]
-   * Background image for the project
+   * Background image, repeat, attachment, and position for the project
    */
   thumbnailBackground?: string
+  /**[CSS:background-size]
+   * Background image size
+   */
+  thumbnailBackgroundSize?: string
 }
 
 /**

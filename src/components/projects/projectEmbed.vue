@@ -29,7 +29,7 @@ const title = computed(() => marked.parse(props.info.title))
  */
 const onProjectClicked = (event: Event) => {
   event.preventDefault()
-  router.push({ name: 'project', params: { id: props.projectId }})
+  router.push({ path: `project/${props.projectId}` })
 }
 </script>
 
@@ -37,10 +37,10 @@ const onProjectClicked = (event: Event) => {
 .project-embed
   .link(
     @click='onProjectClicked($event)'
-    :style='{ background: info.thumbnailBackground }'
+    :style='{ background: info.thumbnailBackground, backgroundSize: info.thumbnailBackgroundSize }'
   )
     .text
-      p.title(
+      .title(
         v-html='title'
       )
       p.period(
@@ -57,4 +57,25 @@ const onProjectClicked = (event: Event) => {
 <style scoped lang="sass">
 .link
   cursor: pointer
+  display: flex
+  height: var(--theme-project-height)
+  flex-direction: column
+  .text
+    background: var(--theme-project-caption-bg)
+    margin: var(--theme-project-caption-margin)
+    padding: var(--theme-project-caption-padding)
+    text-align: center
+    .title,
+    .period
+      color: var(--theme-project-caption-fg)
+      margin: 0
+    .period
+      margin-top: var(--theme-project-caption-padding)
+    .title :deep(*)
+      margin: 0
+.caption
+  margin-top: var(--theme-project-spacing)
+  :deep(*)
+    margin: 0
+    font-style: italic
 </style>
