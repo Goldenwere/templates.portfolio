@@ -14,7 +14,7 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'tagStateChanged', state: FilterState): void,
+  (e: 'filterStateChanged', state: FilterState): void,
 }>()
 
 const tagState: FilterState = {}
@@ -25,7 +25,7 @@ const tagState: FilterState = {}
  */
 const onFilterChanged = (event: FilterChangeEvent) => {
   tagState[event.tag] = event.value
-  emit('tagStateChanged', tagState)
+  emit('filterStateChanged', tagState)
 }
 </script>
 
