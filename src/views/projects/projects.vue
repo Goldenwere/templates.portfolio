@@ -19,19 +19,19 @@ type EmbedReference = {
 const store = useStore()
 
 const content = ref({} as ProjectsViewModel)
-const projects = ref([] as ProjectListingInfo[])
+const projects = ref({} as { [key: string]: ProjectListingInfo })
 const ready = ref(false)
-const projectEmbeds = ref({} as { [index: number]: EmbedReference })
+const projectEmbeds = ref({} as { [key: string]: EmbedReference })
 
 /**
  * Assigns a reference to a project embed to handle toggling visbility when filters change
- * @param index the index of the embed being assigned to the id
+ * @param id the index of the embed being assigned to the id
  * @param tags the tags of the embed
  */
-const setEmbedRef = (index: number, tags?: string[]) => {
+const setEmbedRef = (id: string, tags?: string[]) => {
   window.requestAnimationFrame(() => {
-    projectEmbeds.value[index] = {
-      el: document.querySelector(`.project-embed[project-id="project_${index}"]`)!,
+    projectEmbeds.value[id] = {
+      el: document.querySelector(`#project_${id}`)!,
       tags,
     }
   })
@@ -54,10 +54,10 @@ const onFilterStateChanged = (state: FilterState) => {
 
 const init = async () => {
   content.value = await store.getProjectsData()
-  Promise.all(Object.keys(content.value.projects).map((id) => store.getProjectListingInfo(id)))
+  Promise.all(Object.keys(content.value.projects).map(async (id) => ({ id, info: await store.getProjectListingInfo(id) })))
   .then((_projects) => {
     _projects.forEach((_project) => {
-      projects.value.push(_project)
+      projects.value[_project.id] = _project.info
     })
     ready.value = true
   })
@@ -75,10 +75,11 @@ init()
       h2 Projects
       .grid
         projectEmbed(
-          v-for='(project, index) in projects'
+          v-for='(project, id) in projects'
           :info='project'
-          :project-id='`project_${index}`'
-          :ref='el => setEmbedRef(index, project.tags)'
+          :id='`project_${id}`'
+          :projectId='id'
+          :ref='el => setEmbedRef(id, project.tags)'
         )
     projectsFilters(
       v-if='content.filters'
