@@ -58,11 +58,10 @@ export class DescriptionListElement {
       try {
         const tagsDescriptionElement = tagsWrapper.querySelector('dd')
         if (!!tagsDescriptionElement) {
-          console.log(tagsDescriptionElement.innerHTML)
           originalContent = JSON.parse(tagsDescriptionElement.innerHTML)
-          const formattedText = Object.keys(originalContent).map((key) => (`
-            <span class="tag ${originalContent[key]}">${key}</span>
-          `)).join('\n')
+          const formattedText = Object.keys(originalContent).map((key) => (
+            `<span class="tag ${originalContent[key]}">${key}</span>`
+          )).join('')
           tagsDescriptionElement.innerHTML = formattedText
         } else {
           console.warn('Found a .tags element but not an inner dd element to format on. The .tags class should be on a div wrapping around <dt> and <dd>.')
