@@ -49,7 +49,7 @@ export class DetailsElement {
     } else {
       this.summary.addEventListener('click', (e) => this.onClick(e))
       this.animationOptions = _animationOptions
-      this.element.classList.add('embed')
+      this.element.classList.add('embed', 'details')
     }
   }
 

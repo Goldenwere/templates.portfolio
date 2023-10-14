@@ -23,7 +23,7 @@ export class VideoElement {
     if (!this.videoElement) {
       console.warn('A video embed was defined but contained no video elements within it')
     } else {
-      this.element.classList.add('embed')
+      this.element.classList.add('embed', 'video')
     }
   }
 }

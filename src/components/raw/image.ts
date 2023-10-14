@@ -21,12 +21,16 @@ export class ImageElement {
 
   constructor(_element: HTMLImageElement, _window: Window) {
     this.element = _element
-    this.wrapper = window.document.createElement('div')
-    this.wrapper.classList.add('embed')
-    this.element.insertAdjacentElement('beforebegin', this.wrapper)
-    this.wrapper.appendChild(this.element)
+    const parent = this.element.parentElement!
+    this.wrapper = _window.document.createElement('div')
+    this.wrapper.classList.add('embed', 'image')
+    const subWrapper = _window.document.createElement('div')
+    subWrapper.classList.add('image-wrapper')
+    parent.appendChild(this.wrapper)
+    this.wrapper.appendChild(subWrapper)
+    subWrapper.appendChild(this.element)
     if (!!this.element.title) {
-      this.caption = window.document.createElement('p')
+      this.caption = _window.document.createElement('p')
       this.wrapper.appendChild(this.caption)
       this.caption.innerHTML = this.element.title
     }
