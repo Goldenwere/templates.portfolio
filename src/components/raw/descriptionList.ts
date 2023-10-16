@@ -5,7 +5,7 @@ import { getFormattedPeriod } from '@/src/utilities/dom'
  * Queries for description list nodes and inflates them with extra functionality
  * @param _window the reference to the window
  */
-export const inflateDescriptionListEmbeds = (_window: Window, _projectInfo: ProjectListingInfo) => {
+export const inflateDescriptionListEmbeds = (_window: Window, _projectInfo?: ProjectListingInfo) => {
   _window.document.querySelectorAll('dl').forEach((_element) => {
     new DescriptionListElement(_element, _projectInfo)
   })
@@ -17,10 +17,12 @@ export const inflateDescriptionListEmbeds = (_window: Window, _projectInfo: Proj
 export class DescriptionListElement {
   element: HTMLDListElement
 
-  constructor(_element: HTMLDListElement, _projectInfo: ProjectListingInfo) {
+  constructor(_element: HTMLDListElement, _projectInfo?: ProjectListingInfo) {
     this.element = _element
 
-    this._inflatePeriod(_projectInfo)
+    if (!!_projectInfo) {
+      this._inflatePeriod(_projectInfo)
+    }
     this._inflateTags()
   }
 
