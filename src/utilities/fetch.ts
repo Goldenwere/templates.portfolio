@@ -15,6 +15,7 @@ const domPurifyConfig = {
     'alt',
     'class',
     'href',
+    'id',
     'src',
     'style',
     'title',

@@ -4,5 +4,5 @@ export type TagDefinition = {
 }
 
 export type Tag = 
-  | TagDefinition
-  | string
+| TagDefinition
+| string

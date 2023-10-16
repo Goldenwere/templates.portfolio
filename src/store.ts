@@ -2,20 +2,42 @@ import { defineStore } from 'pinia'
 
 import { fetchAndParseMarkdown, fetchAndParseYaml } from '@/src/utilities/fetch'
 
+import { type HomeViewModel } from '@/src/types/views/home'
 import { type ProjectsViewModel } from '@/src/types/views/projects'
 import { type ProjectListingInfo, type ProjectStoreEntry } from '@/src/types/shared/project'
 
 export const useStore = defineStore('store', {
   state: () => ({
+    _homeData: null as {
+      config: HomeViewModel,
+      content: string,
+    } | null,
     /** project content keyed by id; note that directly referencing this prop can return undefined */
     _projectsById: {} as { [key: string]: ProjectStoreEntry },
     /** content of the projects/portfolio page; note that directly referencing this prop can return undefined */
-    _projectsData: null as unknown as ProjectsViewModel,
+    _projectsData: null as ProjectsViewModel | null,
   }),
   actions: {
     /**
+     * Retrieves the home page's data
+     * @returns home page data
+     */
+    async getHomeData() {
+      if (!!this._homeData) {
+        return this._homeData
+      } else {
+        const config: HomeViewModel = await fetchAndParseYaml(`/content/home.yml`)
+        const content = await fetchAndParseMarkdown(`/content/home.md`)
+        this._homeData = {
+          config,
+          content,
+        }
+        return this._homeData
+      }
+    },
+
+    /**
      * Retrieves the projects / portfolio page's data
-     * @param store reference to the store instance
      * @returns projects page data
      */
     async getProjectsData() {
@@ -41,7 +63,6 @@ export const useStore = defineStore('store', {
 
     /**
      * Retrieves project listing info from either the store or from the yml file
-     * @param store reference to the store instance
      * @param id the id of the project
      * @returns the loaded project listing information
      */
@@ -51,14 +72,13 @@ export const useStore = defineStore('store', {
         return project.listing
       } else {
         const projectsData = await this.getProjectsData()
-        this._projectsById[id].listing = await fetchAndParseYaml(`${projectsData.projects[id]}/${id}.yml`)
+        this._projectsById[id].listing = await fetchAndParseYaml(`${projectsData!.projects[id]}/${id}.yml`)
         return this._projectsById[id].listing as ProjectListingInfo
       }
     },
 
     /**
      * Retrieves a project from either the store or from the markdown file
-     * @param store reference to the store instance
      * @param id the id of the project
      * @returns the loaded project content
      */
@@ -68,7 +88,7 @@ export const useStore = defineStore('store', {
         return project.content
       } else {
         let projectsData = await this.getProjectsData()
-        this._projectsById[id].content = await fetchAndParseMarkdown(`${projectsData.projects[id]}/${id}.md`)
+        this._projectsById[id].content = await fetchAndParseMarkdown(`${projectsData!.projects[id]}/${id}.md`)
         return this._projectsById[id].content as string
       }
     },
