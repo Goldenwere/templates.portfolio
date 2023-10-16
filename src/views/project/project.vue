@@ -5,7 +5,7 @@ import { useStore } from '@/src/store'
 
 import { type ProjectListingInfo } from '@/src/types/shared/project'
 
-import projectContent from './projectContent.vue'
+import embedableContent from '@/src/components/projects/embedableContent.vue'
 
 const props = defineProps<{
   id: string,
@@ -31,7 +31,7 @@ init()
   article(
     v-if='ready'
   )
-    projectContent(
+    embedableContent(
       :content='project'
       :info='info'
     )

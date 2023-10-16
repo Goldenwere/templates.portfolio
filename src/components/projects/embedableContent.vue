@@ -7,7 +7,7 @@ import { type ProjectListingInfo } from '@/src/types/shared/project'
 
 const props = defineProps<{
   content: string
-  info: ProjectListingInfo
+  info?: ProjectListingInfo
 }>()
 
 onMounted(() => {
