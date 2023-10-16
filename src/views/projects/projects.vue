@@ -71,7 +71,7 @@ init()
   .content(
     v-if='ready'
   )
-    section.projects-grid#projects
+    section#projects
       h2 Projects
       .grid
         projectEmbed(
@@ -94,11 +94,17 @@ init()
   opacity: 0.2
 .content
   display: flex
-  .projects-grid
+  gap: var(--theme-body-section-spacing)
+  justify-content: space-between
+  > section
+    padding: var(--theme-body-section-spacing)
+    :deep(h2)
+      margin-top: 0
+  #projects
     flex: 1 1 auto
   #filters
     flex: 0 0 16em
-.projects-grid
+#projects
   .grid
     grid-template-columns: repeat(auto-fit, minmax(18em, 1fr))
     gap: var(--theme-project-spacing)
