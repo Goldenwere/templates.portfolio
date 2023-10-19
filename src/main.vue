@@ -1,13 +1,10 @@
 <script setup lang="ts">
-
+import navHeader from '@/src/components/navigation/navHeader.vue'
 </script>
 
 <template lang="pug">
 #entry
-  header
-    router-link(
-      :to='{ name: "home" }'
-    )
+  navHeader
   main
     router-view
 </template>

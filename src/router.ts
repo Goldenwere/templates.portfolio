@@ -8,7 +8,16 @@ const homeBody = () => import ('./views/home/home.vue')
 const projectBody = () => import ('./views/project/project.vue')
 const projectsBody = () => import ('./views/projects/projects.vue')
 
-export const siteRoutes: RouteRecordRaw[] = [
+export const siteRoutes: { [name: string]: Partial<RouteRecordRaw> } = {
+  'Home': {
+    path: '/',
+  },
+  'Projects': {
+    path: '/projects',
+  },
+}
+
+export const allRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     component: homeBody,
@@ -29,7 +38,7 @@ export const siteRoutes: RouteRecordRaw[] = [
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: siteRoutes,
+  routes: allRoutes,
 })
 
 export default router
