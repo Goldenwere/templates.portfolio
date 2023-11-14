@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useStore } from '@/src/store'
+import { useStore } from 'src/store'
 
-import { doFiltersMatchTags } from '@/src/utilities/dom'
+import { doFiltersMatchTags } from 'src/utilities/dom'
 
-import { type FilterState } from '@/src/types/shared/filter'
-import { type ProjectListingInfo } from '@/src/types/shared/project'
-import { type ProjectsViewModel } from '@/src/types/views/projects'
+import { type FilterState } from 'src/types/shared/filter'
+import { type ProjectListingInfo } from 'src/types/shared/project'
+import { type ProjectsViewModel } from 'src/types/views/projects'
 
-import projectEmbed from '@/src/components/projects/projectEmbed.vue'
+import projectEmbed from 'src/components/projects/projectEmbed.vue'
 import projectsFilters from './projectsFilters.vue'
+import { useRoute } from 'vue-router'
 
 type EmbedReference = {
   el: HTMLElement,
@@ -53,8 +54,10 @@ const onFilterStateChanged = (state: FilterState) => {
 }
 
 const init = async () => {
-  content.value = await store.getProjectsData()
-  Promise.all(Object.keys(content.value.projects).map(async (id) => ({ id, info: await store.getProjectListingInfo(id) })))
+  const route = useRoute()
+  const url = route.path.slice(1)
+  content.value = await store.getProjectsData(url) as ProjectsViewModel
+  Promise.all(Object.keys(content.value.projects).map(async (id) => ({ id, info: await store.getProjectListingInfo(url, id) })))
   .then((_projects) => {
     _projects.forEach((_project) => {
       projects.value[_project.id] = _project.info

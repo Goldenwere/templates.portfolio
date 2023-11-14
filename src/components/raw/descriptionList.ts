@@ -1,5 +1,5 @@
-import { type ProjectListingInfo } from '@/src/types/shared/project'
-import { getFormattedPeriod } from '@/src/utilities/dom'
+import { type ProjectListingInfo } from 'src/types/shared/project'
+import { getFormattedPeriod } from 'src/utilities/dom'
 
 /**
  * Queries for description list nodes and inflates them with extra functionality

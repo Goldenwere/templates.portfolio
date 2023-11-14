@@ -2,8 +2,8 @@
 import { computed, reactive, ref } from 'vue'
 import { type RouteRecordRaw, useRouter } from 'vue-router'
 
-import { siteRoutes } from '@/src/router'
-import { useStore } from '@/src/store'
+import { getRoute } from 'src/router'
+import { useStore } from 'src/store'
 
 type headerLink = {
   route?: Partial<RouteRecordRaw>
@@ -13,31 +13,39 @@ type headerLink = {
 const router = useRouter()
 const store = useStore()
 
-let breadcrumb = reactive([] as headerLink[])
 const showBreadcrumb = ref(false)
-const links = computed(() => Object.keys(siteRoutes).map(name => ({
-  route: siteRoutes[name],
-  name,
-} as headerLink)))
+const links = ref([] as headerLink[])
+let breadcrumb = reactive([] as headerLink[])
 
-router.afterEach(async (to, from) => {
-  if (to.name === 'project') {
-    const projectTitle = (await store.getProjectListingInfo(to.params.id as string)).title
-    breadcrumb = reactive([
-      {
-        route: siteRoutes.Projects,
-        name: 'Portfolio',
-      },
-      {
-        name: projectTitle,
-      },
-    ])
-    showBreadcrumb.value = true
-  } else {
-    breadcrumb = reactive([])
-    showBreadcrumb.value = false
-  }
-})
+const init = async () => {
+  const siteRoutes = (await store.getAppData()).routes
+
+  links.value = Object.keys(siteRoutes).map(url => ({
+    route: getRoute(router, url, siteRoutes[url]),
+    name: siteRoutes[url].displayName || url,
+  } as headerLink))
+
+  // router.afterEach(async (to, from) => {
+  //   if (to.name?.toString().includes(': project')) {
+  //     const projectTitle = (await store.getProjectListingInfo(to.params.id as string)).title
+  //     breadcrumb = reactive([
+  //       {
+  //         route: null,
+  //         name: 'Portfolio',
+  //       },
+  //       {
+  //         name: projectTitle,
+  //       },
+  //     ])
+  //     showBreadcrumb.value = true
+  //   } else {
+  //     breadcrumb = reactive([])
+  //     showBreadcrumb.value = false
+  //   }
+  // })
+}
+
+init()
 </script>
 
 <template lang="pug">

@@ -1,4 +1,4 @@
-import { type FilterDefinition, type ProjectFilterCategory } from '@/src/types/shared/filter'
+import { type FilterDefinition, type ProjectFilterCategory } from 'src/types/shared/filter'
 
 /**
  * The resulting model of the /content/projects.yml file

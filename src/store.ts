@@ -1,23 +1,38 @@
 import { defineStore } from 'pinia'
 
-import { fetchAndParseMarkdown, fetchAndParseYaml } from '@/src/utilities/fetch'
+import { fetchAndParseMarkdown, fetchAndParseYaml } from 'src/utilities/fetch'
 
-import { type HomeViewModel } from '@/src/types/views/home'
-import { type ProjectsViewModel } from '@/src/types/views/projects'
-import { type ProjectListingInfo, type ProjectStoreEntry } from '@/src/types/shared/project'
+import type { AppViewModel } from 'src/types/views/app'
+import type { HomeViewModel } from 'src/types/views/home'
+import type { ProjectsViewModel } from 'src/types/views/projects'
+import type { ProjectListingInfo, ProjectStoreEntry } from 'src/types/shared/project'
 
 export const useStore = defineStore('store', {
   state: () => ({
+    _appData: null as AppViewModel | null,
     _homeData: null as {
       config: HomeViewModel,
       content: string,
     } | null,
+
     /** project content keyed by id; note that directly referencing this prop can return undefined */
-    _projectsById: {} as { [key: string]: ProjectStoreEntry },
+    _projectsById: {} as { [url: string]: { [id: string]: ProjectStoreEntry} },
     /** content of the projects/portfolio page; note that directly referencing this prop can return undefined */
-    _projectsData: null as ProjectsViewModel | null,
+    _projectsData: {} as { [url: string]: ProjectsViewModel | null },
   }),
   actions: {
+    /**
+     * Retrieves the app's main config
+     * @returns app config
+     */
+    async getAppData(): Promise<AppViewModel> {
+      if (!this._appData) {
+        const config: AppViewModel = await fetchAndParseYaml('/content/app.yml')
+        this._appData = config
+      }
+      return this._appData
+    },
+
     /**
      * Retrieves the home page's data
      * @returns home page data
@@ -40,12 +55,12 @@ export const useStore = defineStore('store', {
      * Retrieves the projects / portfolio page's data
      * @returns projects page data
      */
-    async getProjectsData() {
-      if (!!this._projectsData) {
-        return this._projectsData
+    async getProjectsData(url: string) {
+      if (!!this._projectsData[url]) {
+        return this._projectsData[url]
       } else {
-        this._projectsData = await fetchAndParseYaml(`/content/projects.yml`)
-        return this._projectsData
+        this._projectsData[url] = await fetchAndParseYaml(this._appData!.routes[url].configUrl!)
+        return this._projectsData[url]
       }
     },
 
@@ -54,11 +69,14 @@ export const useStore = defineStore('store', {
      * @param id the id of the project
      * @returns the project
      */
-    getProject(id: string) {
-      if (!this._projectsById[id]) {
-        this._projectsById[id] = {}
+    getProject(url: string, id: string) {
+      if (!this._projectsById[url]) {
+        this._projectsById[url] = {}
       }
-      return this._projectsById[id]
+      if (!this._projectsById[url][id]) {
+        this._projectsById[url][id] = {}
+      }
+      return this._projectsById[url][id]
     },
 
     /**
@@ -66,14 +84,14 @@ export const useStore = defineStore('store', {
      * @param id the id of the project
      * @returns the loaded project listing information
      */
-    async getProjectListingInfo(id: string) {
-      const project = this.getProject(id)
+    async getProjectListingInfo(url: string, id: string) {
+      const project = this.getProject(url, id)
       if (!!project.listing) {
         return project.listing
       } else {
-        const projectsData = await this.getProjectsData()
-        this._projectsById[id].listing = await fetchAndParseYaml(`${projectsData!.projects[id]}/${id}.yml`)
-        return this._projectsById[id].listing as ProjectListingInfo
+        const projectsData = await this.getProjectsData(url)
+        this._projectsById[url][id].listing = await fetchAndParseYaml(`${projectsData!.projects[id]}/${id}.yml`)
+        return this._projectsById[url][id].listing as ProjectListingInfo
       }
     },
 
@@ -82,14 +100,14 @@ export const useStore = defineStore('store', {
      * @param id the id of the project
      * @returns the loaded project content
      */
-    async getProjectContent(id: string) {
-      const project = this.getProject(id)
+    async getProjectContent(url: string, id: string) {
+      const project = this.getProject(url, id)
       if (!!project.content) {
         return project.content
       } else {
-        let projectsData = await this.getProjectsData()
-        this._projectsById[id].content = await fetchAndParseMarkdown(`${projectsData!.projects[id]}/${id}.md`)
-        return this._projectsById[id].content as string
+        let projectsData = await this.getProjectsData(url)
+        this._projectsById[url][id].content = await fetchAndParseMarkdown(`${projectsData!.projects[id]}/${id}.md`)
+        return this._projectsById[url][id].content as string
       }
     },
   }

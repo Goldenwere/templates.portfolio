@@ -1,7 +1,7 @@
 import rfdc from 'rfdc'
 
-import { type DateRange } from '@/src/types/shared/dateRange'
-import { type FilterState } from '@/src/types/shared/filter'
+import { type DateRange } from 'src/types/shared/dateRange'
+import { type FilterState } from 'src/types/shared/filter'
 
 export const deepCopy = rfdc()
 

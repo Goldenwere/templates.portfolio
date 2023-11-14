@@ -4,7 +4,7 @@ import {
   type FilterDefinition,
   type FilterState,
   type ProjectFilterCategory,
-} from '@/src/types/shared/filter'
+} from 'src/types/shared/filter'
 
 import projectsFilter from './projectsFilter.vue'
 

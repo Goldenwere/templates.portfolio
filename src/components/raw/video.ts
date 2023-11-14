@@ -1,4 +1,4 @@
-import { findFirstMatchingChild } from '@/src/utilities/dom'
+import { findFirstMatchingChild } from 'src/utilities/dom'
 
 /**
  * Queries for iframe, video, or object nodes and inflates them with extra functionality

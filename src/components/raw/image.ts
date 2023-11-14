@@ -1,4 +1,4 @@
-import { ModalService } from '@/src/components/services/modal'
+import { ModalService } from 'src/components/services/modal'
 
 /**
  * Queries for HTMLImageElement nodes and inflates them with extra functionality

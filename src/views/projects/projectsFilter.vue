@@ -3,7 +3,7 @@ import {
   type FilterChangeEvent,
   type FilterDefinition,
   type ProjectFilterCategory,
-} from '@/src/types/shared/filter'
+} from 'src/types/shared/filter'
 
 defineProps<{
   filter: FilterDefinition | ProjectFilterCategory

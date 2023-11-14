@@ -3,7 +3,7 @@ import { inflateDetailsElements } from './details'
 import { inflateImageEmbeds } from './image'
 import { inflateVideoEmbeds } from './video'
 
-import { type ProjectListingInfo } from '@/src/types/shared/project'
+import { type ProjectListingInfo } from 'src/types/shared/project'
 
 /**
  * Inflates various supported embeds

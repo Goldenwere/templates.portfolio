@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { marked } from 'marked'
 
-import { getFormattedPeriod } from '@/src/utilities/dom'
+import { getFormattedPeriod } from 'src/utilities/dom'
 
-import { type ProjectListingInfo } from '@/src/types/shared/project'
+import { type ProjectListingInfo } from 'src/types/shared/project'
 
 const router = useRouter()
 
@@ -15,6 +15,8 @@ const props = defineProps<{
   info: ProjectListingInfo,
 }>()
 
+const route = useRoute()
+const url = route.path.slice(1)
 const period = computed(() => (!!props.info.period
   ? getFormattedPeriod(props.info.period)
   : undefined
@@ -29,7 +31,7 @@ const title = computed(() => marked.parse(props.info.title))
  */
 const onProjectClicked = (event: Event) => {
   event.preventDefault()
-  router.push({ path: `project/${props.projectId}` })
+  router.push({ path: `${url}/${props.projectId}` })
 }
 </script>
 

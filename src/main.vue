@@ -1,9 +1,22 @@
 <script setup lang="ts">
-import navHeader from '@/src/components/navigation/navHeader.vue'
+import { ref } from 'vue'
+
+import navHeader from 'src/components/navigation/navHeader.vue'
+
+const ready = ref(false)
+
+const init = async () => {
+  ready.value = true
+}
+
+init()
 </script>
 
 <template lang="pug">
-#entry
+#main
+  #entry(
+    v-if='ready'
+  )
   navHeader
   main
     router-view

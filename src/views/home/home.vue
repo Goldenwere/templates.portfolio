@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useStore } from '@/src/store'
+import { useStore } from 'src/store'
 
-import { type HomeViewModel } from '@/src/types/views/home'
+import { type HomeViewModel } from 'src/types/views/home'
 
-import embedableContent from '@/src/components/projects/embedableContent.vue'
+import embedableContent from 'src/components/projects/embedableContent.vue'
 
 const store = useStore()
 const config = ref(null as HomeViewModel | null)
