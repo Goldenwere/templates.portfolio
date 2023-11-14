@@ -38,5 +38,3 @@ const init = async () => {
 }
 
 init()
-
-

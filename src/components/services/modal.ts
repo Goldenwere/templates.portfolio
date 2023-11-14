@@ -6,8 +6,6 @@ import { Service } from './service';
 export class ModalService extends Service<ModalService>() {
   /** whether or not the modal service is open */
   static _open?: boolean = false
-  /** reference to the page document */
-  static _document?: Document
   /** reference to the main modal outlet */
   static _modal?: HTMLDivElement
   /** reference to the container which displays modal content, a child of the container element */
@@ -24,8 +22,6 @@ export class ModalService extends Service<ModalService>() {
       console.warn('the modal service is already initialized')
       return
     }
-
-    this._document = _window.document
 
     // create the modal wrapper outlet element
     this._modal = _window.document.createElement('div')
@@ -49,7 +45,7 @@ export class ModalService extends Service<ModalService>() {
     this._contentOutlet.classList.add('content')
     this._container.appendChild(this._contentOutlet)
 
-    this._document.body.appendChild(this._modal)
+    _window.document.body.appendChild(this._modal)
     this._initialized = true
   }
 
