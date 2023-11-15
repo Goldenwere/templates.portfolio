@@ -32,14 +32,17 @@ const onFilterChanged = (event: FilterChangeEvent) => {
 <template lang="pug">
 section#filters
   h2 Filters
-  projectsFilter(
-    v-for='filter in filters'
-    :filter='filter'
-    :depth='startingDepth'
-    @filterChanged='onFilterChanged'
-  )
+  .filters
+    projectsFilter(
+      v-for='filter in filters'
+      :filter='filter'
+      :depth='startingDepth'
+      @filterChanged='onFilterChanged'
+    )
 </template>
 
 <style scoped lang="sass">
-
+.filters
+  position: sticky
+  top: calc((var(--theme-nav-size) + (var(--theme-header-spacing) * 2)) + (var(--theme-subnav-size) + (var(--theme-header-spacing) * 2)))
 </style>
