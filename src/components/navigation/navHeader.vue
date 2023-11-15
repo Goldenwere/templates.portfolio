@@ -13,10 +13,12 @@ type headerLink = {
 const router = useRouter()
 const store = useStore()
 
-const showBreadcrumb = ref(false)
+const breadcrumb = reactive({
+  enabled: false,
+  trail: [] as headerLink[],
+})
 const links = ref([] as headerLink[])
 const logoUrl = ref('')
-let breadcrumb = reactive([] as headerLink[])
 
 const init = async () => {
   const appData = await store.getAppData()
@@ -32,19 +34,27 @@ const init = async () => {
     if (to.name?.toString().includes(': project')) {
       const url = to.path.split('/')[1]
       const projectTitle = (await store.getProjectListingInfo(url, to.params.id as string)).title
-      breadcrumb = reactive([
+      breadcrumb.trail = [
         {
           route: getRoute(router, url, siteRoutes[url]),
-          name: 'Portfolio',
+          name: siteRoutes[url].displayName || url,
         },
         {
           name: projectTitle,
         },
-      ])
-      showBreadcrumb.value = true
+      ]
+      breadcrumb.enabled = true
+    } else if (to.name !== 'home') {
+      const url = to.path.split('/')[1]
+      breadcrumb.trail = [
+        {
+          name: siteRoutes[url].displayName || url
+        }
+      ]
+      breadcrumb.enabled = true
     } else {
-      breadcrumb = reactive([])
-      showBreadcrumb.value = false
+      breadcrumb.trail = []
+      breadcrumb.enabled = false
     }
   })
 }
@@ -69,10 +79,10 @@ header
       :to='link.route'
     ) {{ link.name }}
   nav.breadcrumb(
-    v-if='showBreadcrumb'
+    v-if='breadcrumb.enabled'
   )
     .link(
-      v-for='link in breadcrumb'
+      v-for='link in breadcrumb.trail'
     )
       span(
         v-if='link.route'
