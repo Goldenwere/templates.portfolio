@@ -7,13 +7,14 @@ import {
 
 import type { AppRoutes, Route, TemplateType } from 'src/types/shared/route'
 
+const genericBody = () => import ('./views/generic/generic.vue')
 const homeBody = () => import ('./views/home/home.vue')
 const projectBody = () => import ('./views/project/project.vue')
 const projectsBody = () => import ('./views/projects/projects.vue')
 
 export const templates: {[ type in TemplateType ]: () => Promise<any>} = {
   'home': homeBody,
-  'markdown': undefined as any,
+  'markdown': genericBody,
   'project': projectBody,
   'projects': projectsBody,
 }

@@ -19,6 +19,7 @@ export const useStore = defineStore('store', {
     _projectsById: {} as { [url: string]: { [id: string]: ProjectStoreEntry} },
     /** content of the projects/portfolio page; note that directly referencing this prop can return undefined */
     _projectsData: {} as { [url: string]: ProjectsViewModel | null },
+    _contentById: {} as { [url: string]: string }
   }),
   actions: {
     /**
@@ -110,6 +111,21 @@ export const useStore = defineStore('store', {
         return this._projectsById[url][id].content as string
       }
     },
+
+    /**
+     * Retrieves generic content from the markdown file associated with a given url
+     * @param url the url of the route
+     * @returns the markdown content
+     */
+    async getGenericContent(url: string) {
+      if (!!this._contentById[url]) {
+        return this._contentById[url]
+      } else {
+        const appData = await this.getAppData()
+        this._contentById[url] = await fetchAndParseMarkdown(`${appData.routes[url].contentUrl}`)
+        return this._contentById[url]
+      }
+    }
   }
 })
 

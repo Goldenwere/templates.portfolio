@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { type RouteRecordRaw, useRouter } from 'vue-router'
 
 import { getRoute } from 'src/router'
