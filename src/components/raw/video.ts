@@ -5,7 +5,7 @@ import { findFirstMatchingChild } from 'src/utilities/dom'
  * @param _window the reference to the window
  */
 export const inflateVideoEmbeds = (_window: Window) => {
-  _window.document.querySelectorAll('.video').forEach((_element) => {
+  _window.document.querySelectorAll('.video:not(.no-inflate)').forEach((_element) => {
     new VideoElement(_element)
   })
 }

@@ -5,7 +5,7 @@ import { ModalService } from 'src/components/services/modal'
  * @param _window the reference to the window
  */
 export const inflateImageEmbeds = (_window: Window) => {
-  _window.document.querySelectorAll('.content img').forEach((_element) => {
+  _window.document.querySelectorAll('.content img:not(.no-inflate)').forEach((_element) => {
     new ImageElement(_element as HTMLImageElement, _window)
   })
 }

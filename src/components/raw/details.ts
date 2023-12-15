@@ -14,8 +14,8 @@ export const inflateDetailsElements = (_window: Window) => {
     easing: styles.getPropertyValue('--theme-transition-function') || 'ease-in-out',
   }
 
-  _window.document.querySelectorAll('details').forEach((_element) => {
-    new DetailsElement(_element, options)
+  _window.document.querySelectorAll('details:not(.no-inflate)').forEach((_element) => {
+    new DetailsElement(_element as HTMLDetailsElement, options)
   })
 }
 

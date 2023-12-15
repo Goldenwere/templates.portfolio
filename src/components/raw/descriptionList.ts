@@ -6,8 +6,8 @@ import { getFormattedPeriod } from 'src/utilities/dom'
  * @param _window the reference to the window
  */
 export const inflateDescriptionListEmbeds = (_window: Window, _projectInfo?: ProjectListingInfo) => {
-  _window.document.querySelectorAll('dl').forEach((_element) => {
-    new DescriptionListElement(_element, _projectInfo)
+  _window.document.querySelectorAll('dl:not(.no-inflate)').forEach((_element) => {
+    new DescriptionListElement(_element as HTMLDListElement, _projectInfo)
   })
 }
 
